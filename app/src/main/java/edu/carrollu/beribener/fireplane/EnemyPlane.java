@@ -24,15 +24,14 @@ public final class EnemyPlane extends Plane {
     }
 
     @Override
-    protected void onDraw() {
+    public void onMove() {
+
 
         //initial positionig setup
         if (this.getX() == -100)
             this.setX(Tools.getRandom(0, gameView.getCanvasWidth() - this.getWidth()));
-
-
-        super.onDraw();
     }
+
 
     public boolean isDismissed() {
 

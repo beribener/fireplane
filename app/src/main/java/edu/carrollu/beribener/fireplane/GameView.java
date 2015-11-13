@@ -61,12 +61,14 @@ public class GameView extends SurfaceView implements Runnable {
         playerPlane = new PlayerPlane(this);
         enemyPlaneManager = new EnemyPlaneManager(this);
         //Clouds clouds = new Clouds(this);
+        ExampleGameItem exampleItem = new ExampleGameItem(this);
 
         //initialize drawables
         drawables = new ArrayList<IDrawable>();
         //drawables.add(clouds);
         drawables.add(playerPlane);
         drawables.add(enemyPlaneManager);
+        drawables.add(exampleItem);
 
 
         //initialize moveables
@@ -96,9 +98,6 @@ public class GameView extends SurfaceView implements Runnable {
             // Capture the current time in milliseconds in startFrameTime
             long startFrameTime = System.currentTimeMillis();
 
-            // Update the frame
-            update();
-
             // Draw the frame
             draw();
 
@@ -111,18 +110,6 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
         }
-
-    }
-
-    // Everything that needs to be updated goes in here
-    // In later projects we will have dozens (arrays) of objects.
-    // We will also do other things like collision detection.
-    public void update() {
-
-        //move the moveables
-        for (IMoveable i : this.moveables)
-            i.move();
-
 
     }
 
@@ -146,6 +133,10 @@ public class GameView extends SurfaceView implements Runnable {
             // Display the current fps on the screen
             canvas.drawText("FPS:" + fps, 20, 40, paint);
             canvas.drawText("POS:" + playerPlane.getX(), 20, 80, paint);
+
+            //move the moveables
+            for (IMoveable i : this.moveables)
+                i.move();
 
             //draw the drawables
             for(IDrawable i : this.drawables)

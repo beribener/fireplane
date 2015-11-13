@@ -17,7 +17,7 @@ public final class PlayerPlane extends Plane {
     }
 
     @Override
-    protected void onDraw() {
+    public void onMove() {
 
         //initial player position
         if(this.getX()==-100)
@@ -31,6 +31,6 @@ public final class PlayerPlane extends Plane {
         else if(this.getX()>maxX)
             this.setX(maxX);
 
-        super.onDraw();
     }
+
 }
