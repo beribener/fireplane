@@ -58,9 +58,13 @@ public abstract class Sprite implements IDrawable {
     public void draw() {
 
         Canvas canvas = this.gameView.canvas;
-        Paint paint = this.gameView.paint;
+        Paint paint = this.getPaint();
         canvas.drawBitmap(this.bitmap, this.getX(), this.getY(), paint);
 
+    }
+
+    public Paint getPaint() {
+        return this.gameView.paint;
     }
 
 

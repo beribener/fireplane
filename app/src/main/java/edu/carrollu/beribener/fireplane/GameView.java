@@ -60,20 +60,21 @@ public class GameView extends SurfaceView implements Runnable {
         //init our game objects
         playerPlane = new PlayerPlane(this);
         enemyPlaneManager = new EnemyPlaneManager(this);
-        //Clouds clouds = new Clouds(this);
+        CloudManager cloudManager = new CloudManager(this);
         ExampleGameItem exampleItem = new ExampleGameItem(this);
 
         //initialize drawables
         drawables = new ArrayList<IDrawable>();
-        //drawables.add(clouds);
+        drawables.add(cloudManager);
         drawables.add(playerPlane);
         drawables.add(enemyPlaneManager);
         drawables.add(exampleItem);
 
 
+
         //initialize moveables
         moveables = new ArrayList<IMoveable>();
-        //moveables.add(clouds);
+        moveables.add(cloudManager);
         moveables.add(playerPlane);
         moveables.add(enemyPlaneManager);
 
