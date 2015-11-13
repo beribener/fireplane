@@ -14,7 +14,11 @@ public class Tools {
     static int getRandom(int lowerBound,int upperBound){
         // initialize a random
         Random random = new Random();
-        return random.nextInt(upperBound+1)+lowerBound;
+
+        if(lowerBound==0)
+            upperBound++;
+
+        return random.nextInt(upperBound)+lowerBound;
     }
 
 

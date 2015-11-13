@@ -6,7 +6,7 @@ import android.graphics.Point;
 /**
  * Created by beribener on 11/11/15.
  */
-public class PlayerPlane extends Plane {
+public final class PlayerPlane extends Plane {
 
     public PlayerPlane(GameView gameView) {
         super(gameView);
@@ -14,7 +14,6 @@ public class PlayerPlane extends Plane {
         this.position = new Point(-100,-100);
 
         this.setSpeedH(gameView.moveSpeed);
-
     }
 
     @Override

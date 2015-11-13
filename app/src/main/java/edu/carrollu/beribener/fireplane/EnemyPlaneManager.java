@@ -11,7 +11,7 @@ import java.util.Iterator;
 /**
  * Created by beribener on 11/11/15.
  */
-public class EnemyPlaneManager implements IDrawable, IMoveable {
+public class EnemyPlaneManager implements IMoveable {
 
     private GameView gameView;
     private ArrayList<EnemyPlane> enemies;

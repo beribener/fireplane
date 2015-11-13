@@ -6,14 +6,14 @@ import android.graphics.Point;
 /**
  * Created by beribener on 11/11/15.
  */
-public class EnemyPlane extends Plane {
+public final class EnemyPlane extends Plane {
 
     int[] enemyPlaneBitmaps = new int[]{R.mipmap.bm_enemy1, R.mipmap.bm_enemy2, R.mipmap.bm_enemy3};
 
     public EnemyPlane(GameView gameView) {
         super(gameView);
 
-        int random = Tools.getRandom(0,2);
+        int random = Tools.getRandom(0, 2);
 
         this.bitmap = BitmapFactory.decodeResource(gameView.getResources(), enemyPlaneBitmaps[random]);
         this.position = new Point(-100, -this.getHeight());

@@ -60,18 +60,18 @@ public class GameView extends SurfaceView implements Runnable {
         //init our game objects
         playerPlane = new PlayerPlane(this);
         enemyPlaneManager = new EnemyPlaneManager(this);
-        Clouds clouds = new Clouds(this);
+        //Clouds clouds = new Clouds(this);
 
         //initialize drawables
         drawables = new ArrayList<IDrawable>();
-        drawables.add(clouds);
+        //drawables.add(clouds);
         drawables.add(playerPlane);
         drawables.add(enemyPlaneManager);
 
 
         //initialize moveables
         moveables = new ArrayList<IMoveable>();
-        moveables.add(clouds);
+        //moveables.add(clouds);
         moveables.add(playerPlane);
         moveables.add(enemyPlaneManager);
 
@@ -119,6 +119,7 @@ public class GameView extends SurfaceView implements Runnable {
     // We will also do other things like collision detection.
     public void update() {
 
+        //move the moveables
         for (IMoveable i : this.moveables)
             i.move();
 
@@ -146,7 +147,7 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawText("FPS:" + fps, 20, 40, paint);
             canvas.drawText("POS:" + playerPlane.getX(), 20, 80, paint);
 
-            //draw all objects
+            //draw the drawables
             for(IDrawable i : this.drawables)
                     i.draw();
 

@@ -3,12 +3,11 @@ package edu.carrollu.beribener.fireplane;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.util.Log;
 
 /**
  * Created by beribener on 11/12/15.
  */
-public class Clouds extends Sprite {
+public class Clouds extends MoveableSprite {
 
     public final int CLOUDS_MOVE_SPEED = 50;
 
