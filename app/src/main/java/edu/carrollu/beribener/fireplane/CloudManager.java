@@ -19,7 +19,7 @@ public class CloudManager implements IMoveable {
     private final int MAX_CLOUDS = 10;
     private final int MAX_DISPATCH_INTERVAL = 1000;
 
-    //handler for dispatch of enemyplanes
+    //handler for dispatching of clouds
     private Handler dispatchHandler;
     private Runnable cloudCreator;
 
@@ -66,12 +66,12 @@ public class CloudManager implements IMoveable {
             //add new planes
             if (clouds.size() < MAX_CLOUDS) {
 
-                /*int speed = Cloud.MOVE_SPEED_SLOW;
+                int speed = Cloud.MOVE_SPEED_SLOW;
                 int random = Tools.getRandom(1, 2);
                 if (random % 2 == 0)
-                    speed = Cloud.MOVE_SPEED_FAST;*/
+                    speed = Cloud.MOVE_SPEED_FAST;
 
-                int speed = Tools.getRandom(70,Cloud.MOVE_SPEED_FAST);
+                //int speed = Tools.getRandom(70,Cloud.MOVE_SPEED_FAST);
 
                 Cloud cloud = new Cloud(gameView, speed);
                 clouds.add(cloud);

@@ -35,10 +35,9 @@ public class Cloud extends MoveableSprite {
 
         //randomize alpha
         paint = new Paint();
-        if (Tools.getRandom(1, 2) % 2 == 0) {
-            int alpha = Tools.getRandom(95, 100);
-            paint.setAlpha(alpha);
-        }
+        if (speed==MOVE_SPEED_SLOW)
+            paint.setAlpha(97);
+
     }
 
     @Override

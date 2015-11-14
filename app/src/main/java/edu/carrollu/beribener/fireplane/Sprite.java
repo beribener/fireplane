@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 
 /**
  * Created by beribener on 11/13/15.
@@ -53,6 +54,11 @@ public abstract class Sprite implements IDrawable {
 
     public void setY(int y) {
         this.position.y = y;
+    }
+
+    public Rect getBounds() {
+            return new Rect(this.getX(),this.getY(),this.getX()+this.getWidth(),this.getY()+this.getHeight());
+
     }
 
     public void draw() {

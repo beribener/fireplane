@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -44,6 +45,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     ArrayList<IDrawable> drawables;
     ArrayList<IMoveable> moveables;
+    ArrayList<ICollidable> collidables;
 
     // When the we initialize (call new()) on gameView
     // This special constructor method runs
@@ -71,12 +73,15 @@ public class GameView extends SurfaceView implements Runnable {
         drawables.add(exampleItem);
 
 
-
         //initialize moveables
         moveables = new ArrayList<IMoveable>();
         moveables.add(cloudManager);
         moveables.add(playerPlane);
         moveables.add(enemyPlaneManager);
+
+        //initialize collidables
+        collidables = new ArrayList<ICollidable>();
+        collidables.add(enemyPlaneManager);
 
 
         // Set our boolean to true - game on!
@@ -90,6 +95,10 @@ public class GameView extends SurfaceView implements Runnable {
 
     public int getCanvasHeight() {
         return ourHolder.getSurfaceFrame().height();
+    }
+
+    public void onPlaneCollision(Point point) {
+        Log.d("COLLUSION", point.toString());
     }
 
     @Override
@@ -140,8 +149,15 @@ public class GameView extends SurfaceView implements Runnable {
                 i.move();
 
             //draw the drawables
-            for(IDrawable i : this.drawables)
-                    i.draw();
+            for (IDrawable i : this.drawables)
+                i.draw();
+
+            //checkcollusions
+            for (ICollidable i : this.collidables) {
+                Point collisionPoint = i.doesColllideWith(this.playerPlane);
+                if (collisionPoint != null)
+                    this.onPlaneCollision(collisionPoint);
+            }
 
             // Draw everything to the screen
             ourHolder.unlockCanvasAndPost(canvas);
