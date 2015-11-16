@@ -98,6 +98,7 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     public void onPlaneCollision(Point point) {
+        //this.playing=false;
         Log.d("COLLUSION", point.toString());
     }
 
