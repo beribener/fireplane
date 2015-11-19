@@ -8,7 +8,8 @@ import android.graphics.Point;
  */
 public final class EnemyPlane extends Plane {
 
-    int[] enemyPlaneBitmaps = new int[]{R.mipmap.bm_enemy1, R.mipmap.bm_enemy2, R.mipmap.bm_enemy3};
+    private int[] enemyPlaneBitmaps = new int[]{R.mipmap.bm_enemy1, R.mipmap.bm_enemy2, R.mipmap.bm_enemy3};
+    private boolean isAlive;
 
     public EnemyPlane(GameView gameView) {
         super(gameView);
@@ -21,6 +22,7 @@ public final class EnemyPlane extends Plane {
         this.setDirectionV(Plane.DIRECTION_DOWN);
         this.setSpeedV(gameView.moveSpeed);
 
+        this.isAlive=true;
     }
 
     @Override
@@ -35,16 +37,25 @@ public final class EnemyPlane extends Plane {
 
     public boolean isDismissed() {
 
-        //String log = String.format("%s | %s | %s | %s", -getWidth(), gameView.getCanvasWidth(), -getHeight(), gameView.getCanvasHeight());
-
-        //Log.d("isDismissed", log);
-
+        //if the plane is out of screen
+        if(this.getY() > gameView.getCanvasHeight())
+            return true;
+        /*
         if (this.getX() < -getWidth() || this.getX() > gameView.getCanvasWidth() || this.getY() < -getHeight() || this.getY() > gameView.getCanvasHeight())
             return true;
-
+        */
 
         return false;
+    }
 
+    public boolean isDead() {
+        return !this.isAlive;
+    }
+
+    public void destroy() {
+        //todo show explosion and set isAlive=false;
+
+        this.isAlive=false;
     }
 
 }

@@ -3,6 +3,8 @@ package edu.carrollu.beribener.fireplane;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 
+import java.util.ArrayList;
+
 /**
  * Created by beribener on 11/11/15.
  */
@@ -10,14 +12,20 @@ public final class PlayerPlane extends Plane {
 
     public PlayerPlane(GameView gameView) {
         super(gameView);
+
         this.bitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.bm_player);
         this.position = new Point(-100, -100);
 
-        this.setSpeedH(gameView.moveSpeed);
+
     }
+
+
+
 
     @Override
     public void onMove() {
+
+        this.setSpeedH(gameView.moveSpeed);
 
         //initial player position
         if (this.getX() == -100)
@@ -30,6 +38,7 @@ public final class PlayerPlane extends Plane {
             this.setX(0);
         else if (this.getX() > maxX)
             this.setX(maxX);
+
 
     }
 

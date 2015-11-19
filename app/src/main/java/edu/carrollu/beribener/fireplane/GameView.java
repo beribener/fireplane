@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -14,6 +13,8 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 
 public class GameView extends SurfaceView implements Runnable {
+
+    public final int GAME_START_SPEED=150;
 
     // This is our thread
     Thread gameThread = null;
@@ -37,15 +38,18 @@ public class GameView extends SurfaceView implements Runnable {
     // This is used to help calculate the fps
     private long timeThisFrame;
 
+    int gameCounter=0;
+
     // He can walk at 150 pixels per second
     int moveSpeed = 150;
 
     PlayerPlane playerPlane;
     EnemyPlaneManager enemyPlaneManager;
+    FireBallManager fireBallManager;
 
     ArrayList<IDrawable> drawables;
     ArrayList<IMoveable> moveables;
-    ArrayList<ICollidable> collidables;
+    ArrayList<ICollidable> enemyCollidables;
 
     // When the we initialize (call new()) on gameView
     // This special constructor method runs
@@ -62,15 +66,20 @@ public class GameView extends SurfaceView implements Runnable {
         //init our game objects
         playerPlane = new PlayerPlane(this);
         enemyPlaneManager = new EnemyPlaneManager(this);
+        fireBallManager = new FireBallManager(this);
+
         CloudManager cloudManager = new CloudManager(this);
         ExampleGameItem exampleItem = new ExampleGameItem(this);
+        ScoreBox scoreBox = new ScoreBox(this);
 
         //initialize drawables
         drawables = new ArrayList<IDrawable>();
         drawables.add(cloudManager);
         drawables.add(playerPlane);
         drawables.add(enemyPlaneManager);
-        drawables.add(exampleItem);
+        //drawables.add(exampleItem);
+        drawables.add(fireBallManager);
+        drawables.add(scoreBox);
 
 
         //initialize moveables
@@ -78,10 +87,11 @@ public class GameView extends SurfaceView implements Runnable {
         moveables.add(cloudManager);
         moveables.add(playerPlane);
         moveables.add(enemyPlaneManager);
+        moveables.add(fireBallManager);
 
-        //initialize collidables
-        collidables = new ArrayList<ICollidable>();
-        collidables.add(enemyPlaneManager);
+        //initialize enemyCollidables
+        enemyCollidables = new ArrayList<ICollidable>();
+        enemyCollidables.add(enemyPlaneManager);
 
 
         // Set our boolean to true - game on!
@@ -153,15 +163,20 @@ public class GameView extends SurfaceView implements Runnable {
             for (IDrawable i : this.drawables)
                 i.draw();
 
-            //checkcollusions
-            for (ICollidable i : this.collidables) {
+            //checkcollisions
+            for (ICollidable i : this.enemyCollidables) {
                 Point collisionPoint = i.doesColllideWith(this.playerPlane);
                 if (collisionPoint != null)
                     this.onPlaneCollision(collisionPoint);
             }
 
+            //game speed
+            this.moveSpeed = GAME_START_SPEED+enemyPlaneManager.getNumberOfPlanesDismissed()*10;
+
             // Draw everything to the screen
             ourHolder.unlockCanvasAndPost(canvas);
+
+            gameCounter++;
         }
 
     }
@@ -192,6 +207,7 @@ public class GameView extends SurfaceView implements Runnable {
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
         int direction = Plane.DIRECTION_ZERO;
+        boolean fired = false;
 
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
@@ -199,17 +215,24 @@ public class GameView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
 
                 direction = motionEvent.getX() < playerPlane.getX() ? Plane.DIRECTION_LEFT : Plane.DIRECTION_RIGHT;
+                fired = motionEvent.getY() < this.getCanvasHeight() / 2;
+
+
                 break;
 
             // Player has removed finger from screen
             case MotionEvent.ACTION_UP:
 
                 direction = Plane.DIRECTION_ZERO;
-
+                fired = false;
                 break;
         }
 
-        playerPlane.setDirectionH(direction);
+        if (fired)
+            fireBallManager.playerFired();
+        else
+            playerPlane.setDirectionH(direction);
+
 
         return true;
     }

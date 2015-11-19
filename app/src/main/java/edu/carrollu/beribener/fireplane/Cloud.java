@@ -31,12 +31,16 @@ public class Cloud extends MoveableSprite {
         this.position = new Point(-100, -this.getHeight());
 
         this.setDirectionV(Plane.DIRECTION_DOWN);
-        this.setSpeedV(speed);
+
 
         //randomize alpha
         paint = new Paint();
-        if (speed==MOVE_SPEED_SLOW)
+        if (speed==MOVE_SPEED_SLOW) {
             paint.setAlpha(97);
+            this.setSpeedV(gameView.moveSpeed-30);
+        }
+        else
+            this.setSpeedV(gameView.moveSpeed);
 
     }
 

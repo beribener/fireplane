@@ -64,11 +64,18 @@ public abstract class Sprite implements IDrawable, ICollidable {
 
     public void draw() {
 
+        this.onDraw();
+
         Canvas canvas = this.gameView.canvas;
         Paint paint = this.getPaint();
         canvas.drawBitmap(this.bitmap, this.getX(), this.getY(), paint);
 
     }
+
+    public void onDraw() {
+
+    }
+
 
     public Paint getPaint() {
         return this.gameView.paint;
@@ -85,6 +92,11 @@ public abstract class Sprite implements IDrawable, ICollidable {
         //detect collision
         //http://www.techrepublic.com/blog/software-engineer/the-abcs-of-android-game-development-detect-collisions/
         if (r1.intersect(r2)) {
+
+            //no bitmap collision
+            if(sprite.getBitmap()==null || this.getBitmap()==null){
+                return new Point(this.getX()+this.getWidth()/2,this.getY()+this.getHeight()/2);
+            }
 
             for (int i = r1.left; i < r1.right; i++) {
 

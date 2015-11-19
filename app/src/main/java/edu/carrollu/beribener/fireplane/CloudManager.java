@@ -80,7 +80,11 @@ public class CloudManager implements IMoveable {
 
             Log.d("Number of Clouds", String.valueOf(clouds.size()));
 
-            dispatchHandler.postDelayed(this, Tools.getRandom(1000, MAX_DISPATCH_INTERVAL));
+            int maxDispatchInterval = MAX_DISPATCH_INTERVAL - 10 * gameView.enemyPlaneManager.getNumberOfPlanesDismissed();
+            if (maxDispatchInterval <= 10)
+                maxDispatchInterval = 10;
+
+            dispatchHandler.postDelayed(this, Tools.getRandom(0,maxDispatchInterval ));
 
         }
     }

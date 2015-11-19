@@ -1,9 +1,7 @@
 package edu.carrollu.beribener.fireplane;
 
 
-import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.os.Handler;
 import android.util.Log;
 
@@ -20,22 +18,29 @@ public class EnemyPlaneManager implements IMoveable, ICollidable {
     private ArrayList<EnemyPlane> enemies;
 
     private final int MAX_ENEMIES = 10;
-    private final int MAX_DISPATCH_INTERVAL = 5000;
+    private final int START_DISPATCH_INTERVAL = 1000;
 
     //handler for dispatch of enemyplanes
-    private Handler dispatchHandler;
-    private Runnable enemyPlaneCreator;
+   /* private Handler dispatchHandler;
+    private Runnable enemyPlaneCreator;*/
+
+    private int numberOfPlanesDismissed;
 
     public EnemyPlaneManager(GameView gameView) {
 
         this.gameView = gameView;
         enemies = new ArrayList<EnemyPlane>();
+        this.numberOfPlanesDismissed=0;
 
-        enemyPlaneCreator = new EnemyPlaneCreator();
+        /*enemyPlaneCreator = new EnemyPlaneCreator();
 
         dispatchHandler = new Handler();
-        dispatchHandler.postDelayed(enemyPlaneCreator, MAX_DISPATCH_INTERVAL);
+        dispatchHandler.postDelayed(enemyPlaneCreator, START_DISPATCH_INTERVAL);*/
 
+    }
+
+    public int getNumberOfPlanesDismissed() {
+        return numberOfPlanesDismissed;
     }
 
     public void draw() {
@@ -47,69 +52,84 @@ public class EnemyPlaneManager implements IMoveable, ICollidable {
 
     public void move() {
 
+        this.createPlanes();
+
+        //remove out of screen and dead planes
+        //using iterator fo remove items from list during iteration - this is the only safest way
+        for (Iterator<EnemyPlane> iterator = enemies.iterator(); iterator.hasNext(); ) {
+            EnemyPlane enemyPlane = iterator.next();
+
+            //check if enemyplane is shot
+            Point shotPoint = gameView.fireBallManager.doesColllideWith(enemyPlane);
+            if(shotPoint!=null)
+                enemyPlane.destroy();
+
+            //remove dead planes from list
+            if (enemyPlane.isDismissed() || enemyPlane.isDead()) {
+                this.numberOfPlanesDismissed++;
+                iterator.remove();
+            }
+        }
+
+
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).move();
         }
+
     }
 
     @Override
-    public Point doesColllideWith(Sprite playerPlane) {
+    public Point doesColllideWith(Sprite sprite) {
 
-        synchronized (this) {
 
-            for (Iterator<EnemyPlane> iterator = enemies.iterator(); iterator.hasNext(); ) {
-                EnemyPlane enemyPlane = iterator.next();
+        for (int i = 0; i < enemies.size(); i++) {
+            EnemyPlane enemyPlane = enemies.get(i);
 
-                Point collision = playerPlane.doesColllideWith(enemyPlane);
-                if (collision != null)
+            //check if our plane collides with living planes
+            if (!enemyPlane.isDead()) {
+                Point collision = sprite.doesColllideWith(enemyPlane);
+                if (collision != null) {
+                    enemyPlane.destroy();
                     return collision;
-
+                }
             }
+
         }
+
         return null;
     }
 
-        class EnemyPlaneCreator implements Runnable {
 
-            @Override
-            public void run() {
+    public void createPlanes() {
 
-                synchronized (EnemyPlaneManager.this) {
+        int dispatchInterval = 200 - numberOfPlanesDismissed*10;
+        if(dispatchInterval<=0)
+            dispatchInterval=20;
 
-                    //remove out of screen planes
-                    //using iterator fo remove items from list during iteration - this is the only safest way
-                    for (Iterator<EnemyPlane> iterator = enemies.iterator(); iterator.hasNext(); ) {
-                        EnemyPlane enemyPlane = iterator.next();
-                        if (enemyPlane.isDismissed()) {
-                            iterator.remove();
-                        }
-                    }
+        if(gameView.gameCounter%dispatchInterval!=0)
+            return;
 
-                    //add new planes
-                    if (enemies.size() < MAX_ENEMIES) {
+        //add new planes
+        if (enemies.size() < MAX_ENEMIES) {
 
-                        EnemyPlane enemy = new EnemyPlane(gameView);
-                        enemies.add(enemy);
-
-                    }
-                }
-
-            /*for (int i = 0; i < enemies.size(); i++) {
-                EnemyPlane enemyPlane = enemies.get(i);
-
-                //int directionH = Tools.getRandom(0, 2) % 2 == 1 ? Plane.DIRECTION_RIGHT : Plane.DIRECTION_LEFT;
-                //enemyPlane.setDirectionH(directionH);
-
-                //int speedH = Tools.getRandom(50, gameView.moveSpeed);
-                //enemyPlane.setSpeedH(gameView.moveSpeed);
-            }*/
-
-                Log.d("Number of EnemyPlanes", String.valueOf(enemies.size()));
-
-                dispatchHandler.postDelayed(this, Tools.getRandom(1000, MAX_DISPATCH_INTERVAL));
-
-            }
+            EnemyPlane enemy = new EnemyPlane(gameView);
+            enemies.add(enemy);
         }
 
+        Log.d("Number of EnemyPlanes", String.valueOf(enemies.size()));
+
+       /* int timeDiff=  EnemyPlaneManager.this.getNumberOfPlanesDismissed()*10;
+        int maxDispatchInterval = START_DISPATCH_INTERVAL - timeDiff;
+        if(maxDispatchInterval<500)
+            maxDispatchInterval=500;
+
+        int minDispatchInterval = 500 - timeDiff;
+        if(minDispatchInterval<0)
+            minDispatchInterval=0;
+
+        dispatchHandler.postDelayed(this, Tools.getRandom(minDispatchInterval, maxDispatchInterval));*/
 
     }
+
+
+}

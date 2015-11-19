@@ -12,6 +12,7 @@ public abstract class MoveableSprite extends Sprite implements IMoveable {
     public static final int DIRECTION_LEFT = -1;
     public static final int DIRECTION_ZERO = 0;
     public static final int DIRECTION_DOWN = DIRECTION_RIGHT;
+    public static final int DIRECTION_UP = DIRECTION_LEFT;
 
     private int directionH = 0;
     private int directionV = 0;
