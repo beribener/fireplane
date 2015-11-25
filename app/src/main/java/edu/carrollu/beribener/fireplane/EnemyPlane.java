@@ -9,7 +9,19 @@ import android.graphics.Point;
 public final class EnemyPlane extends Plane {
 
     private int[] enemyPlaneBitmaps = new int[]{R.mipmap.bm_enemy1, R.mipmap.bm_enemy2, R.mipmap.bm_enemy3};
+
+    private int[] explosions = new int[]{R.mipmap.explosion1,
+            R.mipmap.explosion2,
+            R.mipmap.explosion3,
+            R.mipmap.explosion4,
+            R.mipmap.explosion5
+
+    };
+
     private boolean isAlive;
+    private boolean isExploding;
+    private int explosionIndex;
+    private int explosionRepeatCount;
 
     public EnemyPlane(GameView gameView) {
         super(gameView);
@@ -22,12 +34,14 @@ public final class EnemyPlane extends Plane {
         this.setDirectionV(Plane.DIRECTION_DOWN);
         this.setSpeedV(gameView.moveSpeed);
 
-        this.isAlive=true;
+        this.isAlive = true;
+        this.isExploding = false;
+        this.explosionIndex = 0;
+        this.explosionRepeatCount=0;
     }
 
     @Override
     public void onMove() {
-
 
         //initial positionig setup
         if (this.getX() == -100)
@@ -38,7 +52,7 @@ public final class EnemyPlane extends Plane {
     public boolean isDismissed() {
 
         //if the plane is out of screen
-        if(this.getY() > gameView.getCanvasHeight())
+        if (this.getY() > gameView.getCanvasHeight())
             return true;
         /*
         if (this.getX() < -getWidth() || this.getX() > gameView.getCanvasWidth() || this.getY() < -getHeight() || this.getY() > gameView.getCanvasHeight())
@@ -53,9 +67,31 @@ public final class EnemyPlane extends Plane {
     }
 
     public void destroy() {
-        //todo show explosion and set isAlive=false;
-
-        this.isAlive=false;
+        this.isExploding = true;
     }
 
+    @Override
+    public void draw() {
+
+        //explosions ended
+        if (explosionRepeatCount == 5) {
+            this.isAlive = false;
+            return;
+        }
+
+        if (this.isExploding) {
+
+            this.bitmap = BitmapFactory.decodeResource(gameView.getResources(), explosions[explosionIndex]);
+            explosionIndex++;
+
+            if(explosionIndex==explosions.length) {
+                explosionIndex = 0;
+                explosionRepeatCount++;
+            }
+
+
+        }
+
+        super.draw();
+    }
 }

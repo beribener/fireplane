@@ -68,13 +68,13 @@ public class GameView extends SurfaceView implements Runnable {
         enemyPlaneManager = new EnemyPlaneManager(this);
         fireBallManager = new FireBallManager(this);
 
-        CloudManager cloudManager = new CloudManager(this);
+        BackgroudObjectManager backgroudObjectManager = new BackgroudObjectManager(this);
         ExampleGameItem exampleItem = new ExampleGameItem(this);
         ScoreBox scoreBox = new ScoreBox(this);
 
         //initialize drawables
         drawables = new ArrayList<IDrawable>();
-        drawables.add(cloudManager);
+        drawables.add(backgroudObjectManager);
         drawables.add(playerPlane);
         drawables.add(enemyPlaneManager);
         //drawables.add(exampleItem);
@@ -84,7 +84,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         //initialize moveables
         moveables = new ArrayList<IMoveable>();
-        moveables.add(cloudManager);
+        moveables.add(backgroudObjectManager);
         moveables.add(playerPlane);
         moveables.add(enemyPlaneManager);
         moveables.add(fireBallManager);

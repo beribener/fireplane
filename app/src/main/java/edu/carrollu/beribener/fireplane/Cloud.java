@@ -6,21 +6,20 @@ import android.graphics.Paint;
 import android.graphics.Point;
 
 /**
- * Created by beribener on 11/12/15.
+ * Created by beribener on 11/24/15.
  */
-public class Cloud extends MoveableSprite {
+public class Cloud extends BackgroundObject {
 
-    public static final int MOVE_SPEED_FAST = 120;
-    public static final int MOVE_SPEED_SLOW = 80;
+    private  Paint paint;
 
     public int[] cloudBitmaps = new int[]{R.mipmap.cloud1, R.mipmap.cloud2, R.mipmap.cloud3};
 
-    Paint paint;
 
-    public Cloud(GameView gameView, int speed) {
+    public Cloud(GameView gameView) {
+
         super(gameView);
 
-        int random = Tools.getRandom(0, 2);
+        int random = Tools.getRandom(0, cloudBitmaps.length-1);
         Bitmap bitmap = BitmapFactory.decodeResource(gameView.getResources(), cloudBitmaps[random]);
 
         //randomize size
@@ -32,10 +31,11 @@ public class Cloud extends MoveableSprite {
 
         this.setDirectionV(Plane.DIRECTION_DOWN);
 
+        random = Tools.getRandom(0,1);
 
         //randomize alpha
         paint = new Paint();
-        if (speed==MOVE_SPEED_SLOW) {
+        if (random==0) {
             paint.setAlpha(97);
             this.setSpeedV(gameView.moveSpeed-30);
         }
@@ -49,26 +49,4 @@ public class Cloud extends MoveableSprite {
 
         return this.paint;
     }
-
-    @Override
-    public void onMove() {
-
-
-        //initial positionig setup
-        if (this.getX() == -100)
-            this.setX(Tools.getRandom(0, gameView.getCanvasWidth() - this.getWidth()));
-    }
-
-
-    public boolean isDismissed() {
-
-
-        if (this.getX() < -getWidth() || this.getX() > gameView.getCanvasWidth() || this.getY() < -getHeight() || this.getY() > gameView.getCanvasHeight())
-            return true;
-
-        return false;
-
-    }
-
-
 }
