@@ -19,28 +19,27 @@ public class Island extends BackgroundObject {
     public Island(GameView gameView) {
         super(gameView);
 
-        int random = Tools.getRandom(0, islandBitmaps.length-1);
+        int random = Tools.getRandom(0, islandBitmaps.length - 1);
         Bitmap bitmap = BitmapFactory.decodeResource(gameView.getResources(), islandBitmaps[random]);
 
         //randomize size
         int width = Tools.getRandom(bitmap.getWidth() / 2, bitmap.getWidth());
         int height = bitmap.getHeight() * width / bitmap.getWidth();
 
+        int randomRotation = Tools.getRandom(0, 360);
 
-
-        this.bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        this.bitmap = rotateBitmap(Bitmap.createScaledBitmap(bitmap, width, height, false), randomRotation);
         this.position = new Point(-100, -this.getHeight());
 
         this.setDirectionV(Plane.DIRECTION_DOWN);
 
-        random = Tools.getRandom(0,1);
+        random = Tools.getRandom(0, 1);
 
         //randomize alpha
         this.setSpeedV(gameView.moveSpeed);
     }
 
-    public static Bitmap rotateBitmap(Bitmap source, float angle)
-    {
+    public static Bitmap rotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
