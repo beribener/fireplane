@@ -6,7 +6,13 @@ package edu.carrollu.beribener.fireplane;
 public abstract class Plane extends MoveableSprite {
 
 
+    protected int[] explosions = new int[]{R.mipmap.explosion1,
+            R.mipmap.explosion2,
+            R.mipmap.explosion3,
+            R.mipmap.explosion4,
+            R.mipmap.explosion5
 
+    };
     public Plane(GameView gameView) {
         super(gameView);
     }

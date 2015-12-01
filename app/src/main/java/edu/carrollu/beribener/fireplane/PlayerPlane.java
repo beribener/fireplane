@@ -10,13 +10,19 @@ import java.util.ArrayList;
  */
 public final class PlayerPlane extends Plane {
 
+    private int explosionIndex;
+    private int explosionRepeatCount;
+    private boolean isExploding;
+
     public PlayerPlane(GameView gameView) {
         super(gameView);
 
         this.bitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.bm_player);
         this.position = new Point(-100, -100);
 
-
+        this.isExploding = false;
+        this.explosionIndex = 0;
+        this.explosionRepeatCount=0;
     }
 
 
@@ -24,6 +30,9 @@ public final class PlayerPlane extends Plane {
 
     @Override
     public void onMove() {
+
+        if(this.isExploding)
+            return;
 
         this.setSpeedH(gameView.moveSpeed);
 
@@ -42,4 +51,33 @@ public final class PlayerPlane extends Plane {
 
     }
 
+    public void destroy() {
+        this.isExploding = true;
+    }
+
+    @Override
+    public void draw() {
+
+        //explosions ended
+        if (explosionRepeatCount == 5) {
+            gameView.onGameOver();
+            return;
+        }
+
+        if (this.isExploding) {
+
+            this.bitmap = BitmapFactory.decodeResource(gameView.getResources(), explosions[explosionIndex]);
+            explosionIndex++;
+
+            if(explosionIndex==explosions.length) {
+                explosionIndex = 0;
+                explosionRepeatCount++;
+            }
+
+
+        }
+
+
+        super.draw();
+    }
 }

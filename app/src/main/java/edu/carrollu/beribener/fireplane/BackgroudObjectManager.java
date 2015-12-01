@@ -62,6 +62,10 @@ public class BackgroudObjectManager implements IMoveable {
 
     }
 
+    public void dispose() {
+        dispatchHandler.removeCallbacks(objectCreator);
+    }
+
     class ObjectCreator implements Runnable {
 
         @Override

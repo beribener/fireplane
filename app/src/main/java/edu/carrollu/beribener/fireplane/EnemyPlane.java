@@ -10,14 +10,6 @@ public final class EnemyPlane extends Plane {
 
     private int[] enemyPlaneBitmaps = new int[]{R.mipmap.bm_enemy1, R.mipmap.bm_enemy2, R.mipmap.bm_enemy3};
 
-    private int[] explosions = new int[]{R.mipmap.explosion1,
-            R.mipmap.explosion2,
-            R.mipmap.explosion3,
-            R.mipmap.explosion4,
-            R.mipmap.explosion5
-
-    };
-
     private boolean isAlive;
     private boolean isExploding;
     private int explosionIndex;

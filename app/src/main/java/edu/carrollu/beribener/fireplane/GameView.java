@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class GameView extends SurfaceView implements Runnable {
 
-    public final int GAME_START_SPEED=150;
+    public final int GAME_START_SPEED = 150;
 
     // This is our thread
     Thread gameThread = null;
@@ -38,7 +38,7 @@ public class GameView extends SurfaceView implements Runnable {
     // This is used to help calculate the fps
     private long timeThisFrame;
 
-    int gameCounter=0;
+    int gameCounter = 0;
 
     // He can walk at 150 pixels per second
     int moveSpeed = 150;
@@ -46,6 +46,7 @@ public class GameView extends SurfaceView implements Runnable {
     PlayerPlane playerPlane;
     EnemyPlaneManager enemyPlaneManager;
     FireBallManager fireBallManager;
+    BackgroudObjectManager backgroudObjectManager;
 
     ArrayList<IDrawable> drawables;
     ArrayList<IMoveable> moveables;
@@ -68,7 +69,7 @@ public class GameView extends SurfaceView implements Runnable {
         enemyPlaneManager = new EnemyPlaneManager(this);
         fireBallManager = new FireBallManager(this);
 
-        BackgroudObjectManager backgroudObjectManager = new BackgroudObjectManager(this);
+        backgroudObjectManager = new BackgroudObjectManager(this);
         ExampleGameItem exampleItem = new ExampleGameItem(this);
         ScoreBox scoreBox = new ScoreBox(this);
 
@@ -108,8 +109,13 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     public void onPlaneCollision(Point point) {
-        //this.playing=false;
+        this.playerPlane.destroy();
         Log.d("COLLUSION", point.toString());
+    }
+
+    public void onGameOver() {
+        this.playing = false;
+        this.backgroudObjectManager.dispose();
     }
 
     @Override
@@ -171,7 +177,7 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
             //game speed
-            this.moveSpeed = GAME_START_SPEED+enemyPlaneManager.getNumberOfPlanesDismissed()*10;
+            this.moveSpeed = GAME_START_SPEED + enemyPlaneManager.getNumberOfPlanesDismissed() * 10;
 
             // Draw everything to the screen
             ourHolder.unlockCanvasAndPost(canvas);
