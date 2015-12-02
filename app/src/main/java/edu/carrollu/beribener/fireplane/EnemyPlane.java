@@ -60,6 +60,7 @@ public final class EnemyPlane extends Plane {
 
     public void destroy() {
         this.isExploding = true;
+        gameView.getSoundManager().playExplosion();
     }
 
     @Override

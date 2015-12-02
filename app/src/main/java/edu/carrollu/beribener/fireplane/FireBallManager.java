@@ -22,6 +22,7 @@ public class FireBallManager implements IMoveable, ICollidable {
     }
 
     public void playerFired() {
+        this.gameView.getSoundManager().playFireSound();
         playerFired++;
     }
 

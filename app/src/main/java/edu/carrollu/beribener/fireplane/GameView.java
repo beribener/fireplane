@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -48,6 +49,8 @@ public class GameView extends SurfaceView implements Runnable {
     FireBallManager fireBallManager;
     BackgroudObjectManager backgroudObjectManager;
 
+    SoundManager soundManager;
+
     ArrayList<IDrawable> drawables;
     ArrayList<IMoveable> moveables;
     ArrayList<ICollidable> enemyCollidables;
@@ -72,6 +75,9 @@ public class GameView extends SurfaceView implements Runnable {
         backgroudObjectManager = new BackgroudObjectManager(this);
         ExampleGameItem exampleItem = new ExampleGameItem(this);
         ScoreBox scoreBox = new ScoreBox(this);
+
+        //initialize sound manager
+        this.soundManager = new SoundManager(this);
 
         //initialize drawables
         drawables = new ArrayList<IDrawable>();
@@ -98,6 +104,13 @@ public class GameView extends SurfaceView implements Runnable {
         // Set our boolean to true - game on!
         playing = true;
 
+        //start the background music
+        soundManager.playMusic();
+
+    }
+
+    public SoundManager getSoundManager() {
+        return this.soundManager;
     }
 
     public int getCanvasWidth() {
