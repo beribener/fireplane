@@ -22,7 +22,7 @@ public class SoundManager {
         this.firePlayer = MediaPlayer.create(this.gameView.getContext(), R.raw.fire);
         this.musicPlayer = MediaPlayer.create(this.gameView.getContext(), R.raw.bg2);
         this.musicPlayer.setLooping(true);
-        this.musicPlayer.setVolume(0.1F,0.1F);
+        this.musicPlayer.setVolume(0.1F, 0.1F);
 
         this.explosionPlayer = MediaPlayer.create(this.gameView.getContext(), R.raw.explosion);
     }
@@ -35,7 +35,6 @@ public class SoundManager {
 
                 firePlayer.stop();
                 firePlayer.prepare();
-
 
             }
         } catch (Exception ex) {
@@ -52,9 +51,23 @@ public class SoundManager {
 
     public void playExplosion() {
 
+        if (explosionPlayer.isPlaying()) {
+            explosionPlayer.stop();
+            try {
+                explosionPlayer.prepare();
+            } catch (Exception ex){
+
+            }
+        }
 
         explosionPlayer.start();
 
+    }
+
+    public void dispose(){
+        this.firePlayer.release();
+        this.explosionPlayer.release();
+        this.musicPlayer.release();
     }
 
 }

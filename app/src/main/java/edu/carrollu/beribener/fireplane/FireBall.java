@@ -20,7 +20,7 @@ public class FireBall extends MoveableSprite {
 
         this.setX(gameView.playerPlane.getX() + gameView.playerPlane.getWidth() / 2);
         this.setY(gameView.playerPlane.getY());
-        this.setSpeedV(200);
+        this.setSpeedV(gameView.moveSpeed);
         this.setDirectionV(MoveableSprite.DIRECTION_UP);
 
         this.isAlive = true;

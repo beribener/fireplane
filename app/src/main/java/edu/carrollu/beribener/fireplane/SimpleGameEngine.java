@@ -3,18 +3,22 @@ package edu.carrollu.beribener.fireplane;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ImageView;
+
 
 public class SimpleGameEngine extends AppCompatActivity {
 
@@ -27,6 +31,27 @@ public class SimpleGameEngine extends AppCompatActivity {
         // Initialize gameView and set it as the view
         gameView = new GameView(this);
         setContentView(gameView);
+    }
+
+    public void onGameOver() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameView.dispose();
+                        Intent resultData = new Intent();
+                        resultData.putExtra("score",gameView.getScore());
+                        setResult(Activity.RESULT_OK,resultData);
+                        finish();
+                    }
+                }, 2000);
+            }
+        });
 
     }
 
@@ -52,5 +77,7 @@ public class SimpleGameEngine extends AppCompatActivity {
         // Tell the gameView pause method to execute
         gameView.pause();
     }
+
+
 
 }

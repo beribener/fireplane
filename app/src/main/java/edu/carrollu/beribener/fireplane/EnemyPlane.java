@@ -59,15 +59,17 @@ public final class EnemyPlane extends Plane {
     }
 
     public void destroy() {
-        this.isExploding = true;
-        gameView.getSoundManager().playExplosion();
+        if(!this.isExploding) {
+            this.isExploding = true;
+            gameView.getSoundManager().playExplosion();
+        }
     }
 
     @Override
     public void draw() {
 
         //explosions ended
-        if (explosionRepeatCount == 5) {
+        if (explosionRepeatCount == 2) {
             this.isAlive = false;
             return;
         }

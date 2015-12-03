@@ -17,6 +17,8 @@ public class GameView extends SurfaceView implements Runnable {
 
     public final int GAME_START_SPEED = 150;
 
+    SimpleGameEngine simpleGameEngine;
+
     // This is our thread
     Thread gameThread = null;
 
@@ -57,11 +59,13 @@ public class GameView extends SurfaceView implements Runnable {
 
     // When the we initialize (call new()) on gameView
     // This special constructor method runs
-    public GameView(Context context) {
+    public GameView(SimpleGameEngine context) {
         // The next line of code asks the
         // SurfaceView class to set up our object.
         // How kind.
         super(context);
+
+        this.simpleGameEngine = context;
 
         // Initialize ourHolder and paint objects
         ourHolder = getHolder();
@@ -128,7 +132,12 @@ public class GameView extends SurfaceView implements Runnable {
 
     public void onGameOver() {
         this.playing = false;
+        this.simpleGameEngine.onGameOver();
+    }
+
+    public void dispose() {
         this.backgroudObjectManager.dispose();
+        this.soundManager.dispose();
     }
 
     @Override
@@ -236,7 +245,6 @@ public class GameView extends SurfaceView implements Runnable {
                 direction = motionEvent.getX() < playerPlane.getX() ? Plane.DIRECTION_LEFT : Plane.DIRECTION_RIGHT;
                 fired = motionEvent.getY() < this.getCanvasHeight() / 2;
 
-
                 break;
 
             // Player has removed finger from screen
@@ -252,8 +260,11 @@ public class GameView extends SurfaceView implements Runnable {
         else
             playerPlane.setDirectionH(direction);
 
-
         return true;
+    }
+
+    public int getScore() {
+        return this.enemyPlaneManager.getNumberOfPlanesDismissed();
     }
 
 }
