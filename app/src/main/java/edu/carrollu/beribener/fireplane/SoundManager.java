@@ -1,6 +1,7 @@
 package edu.carrollu.beribener.fireplane;
 
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 
 import java.io.IOException;
 
@@ -32,7 +33,6 @@ public class SoundManager {
 
         try {
             if (firePlayer.isPlaying()) {
-
                 firePlayer.stop();
                 firePlayer.prepare();
 

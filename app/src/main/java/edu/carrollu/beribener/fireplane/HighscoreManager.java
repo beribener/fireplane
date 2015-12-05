@@ -73,6 +73,8 @@ public class HighscoreManager {
 
         scores.add(newScore);
 
+        Collections.sort(scores);
+
         Set<String> newScores = new HashSet<String>();
 
         for (int i = 0; i < 10 && i < scores.size(); i++) {
@@ -83,6 +85,12 @@ public class HighscoreManager {
         editor.putStringSet("HIGHSCORES", newScores);
         editor.commit();
 
+    }
+
+    public void clearScores() {
+        Editor editor = this.prefs.edit();
+        editor.putStringSet("HIGHSCORES", null);
+        editor.commit();
     }
 
     @Override

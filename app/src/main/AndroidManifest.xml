@@ -4,25 +4,27 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/bm_player"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".SimpleGameEngine"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
             android:name=".StartScreenActivity"
-            android:label="@string/title_activity_start_screen" >
+            android:label="@string/app_name"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".SimpleGameEngine"
+            android:label="@string/app_name"
+            >
+        </activity>
+        <activity
             android:name=".HighScoresActivity"
-            android:label="@string/title_activity_high_scores" >
+            android:label="@string/title_activity_high_scores"
+            >
         </activity>
     </application>
 

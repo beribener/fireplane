@@ -44,11 +44,25 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center" />
 
-    <Space
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text=""
+        android:ems="10"
+        android:id="@+id/txtName"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.27" />
+        android:layout_weight="0.19" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Score"
+        android:id="@+id/btnAddScore"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.19"
+        android:onClick="onAddScoreButtonClick"
+        />
 
     <ImageButton
         android:layout_width="wrap_content"

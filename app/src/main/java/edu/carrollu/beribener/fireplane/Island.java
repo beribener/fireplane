@@ -36,7 +36,7 @@ public class Island extends BackgroundObject {
         random = Tools.getRandom(0, 1);
 
         //randomize alpha
-        this.setSpeedV(gameView.moveSpeed);
+        this.setSpeedV(gameView.moveSpeed-30);
     }
 
     public static Bitmap rotateBitmap(Bitmap source, float angle) {

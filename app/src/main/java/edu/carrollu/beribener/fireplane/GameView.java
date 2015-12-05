@@ -213,6 +213,7 @@ public class GameView extends SurfaceView implements Runnable {
     // shutdown our thread.
     public void pause() {
         playing = false;
+        this.dispose();
         try {
             gameThread.join();
         } catch (InterruptedException e) {
