@@ -3,6 +3,7 @@ package edu.carrollu.beribener.fireplane;
 import java.util.Random;
 
 /**
+ * Class for helper methods.
  * Created by beribener on 11/11/15.
  */
 public class Tools {

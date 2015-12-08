@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 
 /**
+ * Represents a visible entity in the game.
  * Created by beribener on 11/13/15.
  */
 public abstract class Sprite implements IDrawable, ICollidable {
