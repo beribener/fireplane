@@ -5,6 +5,7 @@ import android.graphics.Point;
 
 /**
  * Created by beribener on 11/11/15.
+ * Represents an enemy plane in the game.
  */
 public final class EnemyPlane extends Plane {
 
@@ -20,9 +21,13 @@ public final class EnemyPlane extends Plane {
 
         int random = Tools.getRandom(0, 2);
 
+        //choose random bitmap for the plane
         this.bitmap = BitmapFactory.decodeResource(gameView.getResources(), enemyPlaneBitmaps[random]);
+
+        //set position out of the upper boundary of screen
         this.position = new Point(-100, -this.getHeight());
 
+        //set direction & speed
         this.setDirectionV(Plane.DIRECTION_DOWN);
         this.setSpeedV(gameView.moveSpeed);
 
@@ -40,24 +45,30 @@ public final class EnemyPlane extends Plane {
             this.setX(Tools.getRandom(0, gameView.getCanvasWidth() - this.getWidth()));
     }
 
-
+    /**
+     * Returns true if the plane is out of screen boundaries.
+     * @return
+     */
     public boolean isDismissed() {
 
         //if the plane is out of screen
         if (this.getY() > gameView.getCanvasHeight())
             return true;
-        /*
-        if (this.getX() < -getWidth() || this.getX() > gameView.getCanvasWidth() || this.getY() < -getHeight() || this.getY() > gameView.getCanvasHeight())
-            return true;
-        */
 
         return false;
     }
 
+    /**
+     * Returns true if the plane is shoot down by player plane.
+     * @return
+     */
     public boolean isDead() {
         return !this.isAlive;
     }
 
+    /**
+     * Sets plane to exploding state.
+     */
     public void destroy() {
         if(!this.isExploding) {
             this.isExploding = true;
@@ -68,12 +79,13 @@ public final class EnemyPlane extends Plane {
     @Override
     public void draw() {
 
-        //explosions ended
+        //explosions ended - mark as dead
         if (explosionRepeatCount == 2) {
             this.isAlive = false;
             return;
         }
 
+        //set explosion bitmaps
         if (this.isExploding) {
 
             this.bitmap = BitmapFactory.decodeResource(gameView.getResources(), explosions[explosionIndex]);

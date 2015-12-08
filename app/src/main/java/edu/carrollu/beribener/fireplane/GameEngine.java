@@ -20,7 +20,7 @@ import android.view.SurfaceView;
 import android.widget.ImageView;
 
 
-public class SimpleGameEngine extends AppCompatActivity {
+public class GameEngine extends AppCompatActivity {
 
     GameView gameView;
 
@@ -58,7 +58,7 @@ public class SimpleGameEngine extends AppCompatActivity {
 
     // This is the end of our GameView inner class
 
-    // More SimpleGameEngine methods will go here
+    // More GameEngine methods will go here
 
     // This method executes when the player starts the game
     @Override

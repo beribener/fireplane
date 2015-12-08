@@ -1,11 +1,9 @@
 package edu.carrollu.beribener.fireplane;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -13,71 +11,68 @@ import android.view.SurfaceView;
 
 import java.util.ArrayList;
 
+/**
+ * Game framework inspired by:
+ * http://gamecodeschool.com/android/coding-android-sprite-sheet-animations/
+ */
 public class GameView extends SurfaceView implements Runnable {
 
     public final int GAME_START_SPEED = 150;
 
-    SimpleGameEngine simpleGameEngine;
+    GameEngine gameEngine;
 
-    // This is our thread
     Thread gameThread = null;
 
-    // This is new. We need a SurfaceHolder
-    // When we use Paint and Canvas in a thread
-    // We will see it in action in the drawPlanes method soon.
-    SurfaceHolder ourHolder;
+    SurfaceHolder surfaceHolder;
 
-    // A boolean which we will set and unset
-    // when the game is running- or not.
+    //indicates if the game is running or not
     volatile boolean playing;
 
-    // A Canvas and a Paint object
+    //canvas to draw objects to
     Canvas canvas;
+
+    //default paint
     Paint paint;
 
-    // This variable tracks the game frame rate
+    //track frame rate
     int fps;
 
-    // This is used to help calculate the fps
+    //duration for this frame to be drawn on screen
     private long timeThisFrame;
 
+    //internal counter to mimic timer behaviour in the same thread
     int gameCounter = 0;
 
-    // He can walk at 150 pixels per second
+    //initial game speed
     int moveSpeed = 150;
 
+    //game elements
     PlayerPlane playerPlane;
     EnemyPlaneManager enemyPlaneManager;
     FireBallManager fireBallManager;
     BackgroudObjectManager backgroudObjectManager;
-
     SoundManager soundManager;
 
     ArrayList<IDrawable> drawables;
     ArrayList<IMoveable> moveables;
     ArrayList<ICollidable> enemyCollidables;
 
-    // When the we initialize (call new()) on gameView
-    // This special constructor method runs
-    public GameView(SimpleGameEngine context) {
-        // The next line of code asks the
-        // SurfaceView class to set up our object.
-        // How kind.
+
+    public GameView(GameEngine context) {
+
         super(context);
 
-        this.simpleGameEngine = context;
+        this.gameEngine = context;
 
-        // Initialize ourHolder and paint objects
-        ourHolder = getHolder();
-        paint = new Paint();
+        surfaceHolder = getHolder();
+        this.paint = new Paint();
 
         //init our game objects
         playerPlane = new PlayerPlane(this);
         enemyPlaneManager = new EnemyPlaneManager(this);
         fireBallManager = new FireBallManager(this);
-
         backgroudObjectManager = new BackgroudObjectManager(this);
-        ExampleGameItem exampleItem = new ExampleGameItem(this);
+        //ExampleGameItem exampleItem = new ExampleGameItem(this);
         ScoreBox scoreBox = new ScoreBox(this);
 
         //initialize sound manager
@@ -92,7 +87,6 @@ public class GameView extends SurfaceView implements Runnable {
         drawables.add(fireBallManager);
         drawables.add(scoreBox);
 
-
         //initialize moveables
         moveables = new ArrayList<IMoveable>();
         moveables.add(backgroudObjectManager);
@@ -104,8 +98,6 @@ public class GameView extends SurfaceView implements Runnable {
         enemyCollidables = new ArrayList<ICollidable>();
         enemyCollidables.add(enemyPlaneManager);
 
-
-        // Set our boolean to true - game on!
         playing = true;
 
         //start the background music
@@ -118,11 +110,11 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     public int getCanvasWidth() {
-        return ourHolder.getSurfaceFrame().width();
+        return surfaceHolder.getSurfaceFrame().width();
     }
 
     public int getCanvasHeight() {
-        return ourHolder.getSurfaceFrame().height();
+        return surfaceHolder.getSurfaceFrame().height();
     }
 
     public void onPlaneCollision(Point point) {
@@ -132,7 +124,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     public void onGameOver() {
         this.playing = false;
-        this.simpleGameEngine.onGameOver();
+        this.gameEngine.onGameOver();
     }
 
     public void dispose() {
@@ -144,16 +136,16 @@ public class GameView extends SurfaceView implements Runnable {
     public void run() {
         while (playing) {
 
-            // Capture the current time in milliseconds in startFrameTime
+            //get current time
             long startFrameTime = System.currentTimeMillis();
 
             // Draw the frame
             draw();
 
-            // Calculate the fps this frame
-            // We can then use the result to
-            // time animations and more.
+            //calculate drawing duration for this frame
             timeThisFrame = System.currentTimeMillis() - startFrameTime;
+
+            //calculate fps
             if (timeThisFrame > 0) {
                 fps = 1000 / (int) timeThisFrame;
             }
@@ -162,26 +154,26 @@ public class GameView extends SurfaceView implements Runnable {
 
     }
 
-    // Draw the newly updated scene
+    //draws all game elements in the screen
     public void draw() {
 
-        // Make sure our drawing surface is valid or we crash
-        if (ourHolder.getSurface().isValid()) {
-            // Lock the canvas ready to drawPlanes
-            canvas = ourHolder.lockCanvas();
+        if (surfaceHolder.getSurface().isValid()) {
 
-            // Draw the background color
+            //lock the canvas
+            canvas = surfaceHolder.lockCanvas();
+
+            //draw background color
             canvas.drawColor(Color.argb(255, 26, 128, 182));
 
             // Choose the brush color for drawing
-            paint.setColor(Color.argb(255, 249, 129, 0));
+            /*paint.setColor(Color.argb(255, 249, 129, 0));
 
             // Make the text a bit bigger
             paint.setTextSize(45);
 
             // Display the current fps on the screen
             canvas.drawText("FPS:" + fps, 20, 40, paint);
-            canvas.drawText("POS:" + playerPlane.getX(), 20, 80, paint);
+            canvas.drawText("POS:" + playerPlane.getX(), 20, 80, paint);*/
 
             //move the moveables
             for (IMoveable i : this.moveables)
@@ -198,19 +190,17 @@ public class GameView extends SurfaceView implements Runnable {
                     this.onPlaneCollision(collisionPoint);
             }
 
-            //game speed
+            //adjust game speed according to planes dismissed
             this.moveSpeed = GAME_START_SPEED + enemyPlaneManager.getNumberOfPlanesDismissed() * 10;
 
             // Draw everything to the screen
-            ourHolder.unlockCanvasAndPost(canvas);
+            surfaceHolder.unlockCanvasAndPost(canvas);
 
             gameCounter++;
         }
 
     }
 
-    // If SimpleGameEngine Activity is paused/stopped
-    // shutdown our thread.
     public void pause() {
         playing = false;
         this.dispose();
@@ -222,16 +212,13 @@ public class GameView extends SurfaceView implements Runnable {
 
     }
 
-    // If SimpleGameEngine Activity is started then
-    // start our thread.
     public void resume() {
         playing = true;
         gameThread = new Thread(this);
         gameThread.start();
     }
 
-    // The SurfaceView class implements onTouchListener
-    // So we can override this method and detect screen touches.
+    //used to track player input
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
@@ -243,7 +230,10 @@ public class GameView extends SurfaceView implements Runnable {
             // Player has touched the screen
             case MotionEvent.ACTION_DOWN:
 
+                //determine direction by relative position of touch to plane
                 direction = motionEvent.getX() < playerPlane.getX() ? Plane.DIRECTION_LEFT : Plane.DIRECTION_RIGHT;
+
+                //player plane fires when upper half of the screen is clicked
                 fired = motionEvent.getY() < this.getCanvasHeight() / 2;
 
                 break;
@@ -264,6 +254,7 @@ public class GameView extends SurfaceView implements Runnable {
         return true;
     }
 
+    //returns the current score in the game
     public int getScore() {
         return this.enemyPlaneManager.getNumberOfPlanesDismissed();
     }

@@ -20,7 +20,7 @@ public class EnemyPlaneManager implements IMoveable, ICollidable {
     private final int MAX_ENEMIES = 10;
     private final int START_DISPATCH_INTERVAL = 1000;
 
-    //handler for dispatch of enemyplanes
+    //handler for dispatching of enemyplanes
    /* private Handler dispatchHandler;
     private Runnable enemyPlaneCreator;*/
 

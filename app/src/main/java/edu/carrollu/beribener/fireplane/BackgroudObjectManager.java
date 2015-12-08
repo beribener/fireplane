@@ -10,18 +10,20 @@ import java.util.Iterator;
 
 /**
  * Created by beribener on 11/11/15.
+ * Creates and destroys islands and clouds in the game by dispatching them randomly from top of the screen
  */
 public class BackgroudObjectManager implements IMoveable {
 
     private GameView gameView;
     private ArrayList<BackgroundObject> backgroundObjects;
-    private ArrayList<BackgroundObject> clouds;
-    private ArrayList<BackgroundObject> islands;
 
+    //maximum number of objects at the same time on screen
     private final int MAX_OBJECTS = 10;
+
+    //maximum delay between object creation
     private final int MAX_DISPATCH_INTERVAL = 1000;
 
-    //handler for dispatching of backgroundObjects
+    //handler thread for dispatching of backgroundObjects
     private Handler dispatchHandler;
     private Runnable objectCreator;
 
@@ -29,8 +31,6 @@ public class BackgroudObjectManager implements IMoveable {
 
         this.gameView = gameView;
         backgroundObjects = new ArrayList<BackgroundObject>();
-        clouds = new ArrayList<BackgroundObject>();
-        islands = new ArrayList<BackgroundObject>();
 
         objectCreator = new ObjectCreator();
 
@@ -41,12 +41,14 @@ public class BackgroudObjectManager implements IMoveable {
 
     public void draw() {
 
+        //first draw islands
         for (int i = 0; i < backgroundObjects.size(); i++) {
             BackgroundObject obj = backgroundObjects.get(i);
             if (obj instanceof Island)
                 obj.draw();
         }
 
+        //draw clouds
         for (int i = 0; i < backgroundObjects.size(); i++) {
             BackgroundObject obj = backgroundObjects.get(i);
             if (obj instanceof Cloud)
@@ -71,7 +73,7 @@ public class BackgroudObjectManager implements IMoveable {
         @Override
         public void run() {
 
-            //remove out of screen planes
+            //remove out of screen objects
             //using iterator fo remove items from list during iteration - this is the only safest way
             for (Iterator<BackgroundObject> iterator = backgroundObjects.iterator(); iterator.hasNext(); ) {
                 BackgroundObject backgroundObject = iterator.next();
@@ -80,7 +82,7 @@ public class BackgroudObjectManager implements IMoveable {
                 }
             }
 
-            //add new backgroundObjects
+            //add new background objects randomly
             if (backgroundObjects.size() < MAX_OBJECTS) {
 
                 BackgroundObject backgroundObject;
@@ -95,10 +97,12 @@ public class BackgroudObjectManager implements IMoveable {
 
             Log.d("Number of Clouds", String.valueOf(backgroundObjects.size()));
 
+            //decrease delay according to the progress in the game
             int maxDispatchInterval = MAX_DISPATCH_INTERVAL - 10 * gameView.enemyPlaneManager.getNumberOfPlanesDismissed();
             if (maxDispatchInterval <= 10)
                 maxDispatchInterval = 10;
 
+            //set the handler to run after delay - again
             dispatchHandler.postDelayed(this, Tools.getRandom(0, maxDispatchInterval));
 
         }

@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -24,7 +22,7 @@ public class StartScreenActivity extends AppCompatActivity {
     HighscoreManager highscoreManager;
 
     EditText txtName;
-    Button btnAddScore;
+    ImageButton btnAddScore;
 
     final int GAME_INTENT_ID = 1;
 
@@ -43,14 +41,14 @@ public class StartScreenActivity extends AppCompatActivity {
         scoreText = (TextView) findViewById(R.id.txtScore);
 
         txtName = (EditText) findViewById(R.id.txtName);
-        btnAddScore = (Button) findViewById(R.id.btnAddScore);
+        btnAddScore = (ImageButton) findViewById(R.id.btnAddScore);
 
         this.hideHighScoreInput();
     }
 
     public void onStartButtonClick(View view) {
         this.hideHighScoreInput();
-        Intent game = new Intent(this, SimpleGameEngine.class);
+        Intent game = new Intent(this, GameEngine.class);
         startActivityForResult(game, GAME_INTENT_ID);
 
     }

@@ -10,10 +10,10 @@ import android.graphics.Point;
  */
 public class Cloud extends BackgroundObject {
 
+    //custom paint for setting alpha
     private  Paint paint;
 
     public int[] cloudBitmaps = new int[]{R.mipmap.cloud1, R.mipmap.cloud2, R.mipmap.cloud3};
-
 
     public Cloud(GameView gameView) {
 
@@ -29,11 +29,12 @@ public class Cloud extends BackgroundObject {
         this.bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
         this.position = new Point(-100, -this.getHeight());
 
+        //set direction
         this.setDirectionV(Plane.DIRECTION_DOWN);
 
         random = Tools.getRandom(0,1);
 
-        //randomize alpha
+        //randomize alpha and set speed
         paint = new Paint();
         if (random==0) {
             paint.setAlpha(97);

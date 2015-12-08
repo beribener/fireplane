@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * This class provides an interface to store/retrieve values from sharedPrefs.
  * Created by beribener on 12/2/15.
  */
 public class HighscoreManager {
